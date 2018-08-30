@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yimi.dao.MessageDao">
+    <resultMap id="messageDto" type="cn.yimi.dto.MessageDto">
+        <result column="message" property="message"/>
+        <result column="record_time" property="recordTime"/>
+        <result column="author" property="author"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="message_id" property="messageId"/>
+    </resultMap>
+
+    <sql id="insertColumn">
+        message,
+        author,
+        type,
+        status,
+        record_time
+    </sql>
+
+    <insert id="insertMessage" parameterType="cn.yimi.dto.MessageDto">
+      INSERT INTO message_info(
+      <include refid="insertColumn"></include>
+      )VALUES(
+      #{message},#{author},#{type},'START',#{recordTime}
+      )
+    </insert>
+
+    <update id="delMessage" parameterType="java.lang.String">
+        UPDATE message_info SET status = 'STOP'
+        WHERE message_id = #{messageId}
+    </update>
+
+    <select id="getMessageList" parameterType="cn.yimi.vo.MessageVo" resultMap="messageDto">
+        SELECT message,record_time,author,type,status,message_id
+        FROM message_info
+        WHERE status = 'START'
+        <if test="message != null">
+            AND message LIKE CONCAT('%',#{message},'%')
+        </if>
+        <if test="author != null">
+            AND (type != 'pri' OR author = #{author})
+        </if>
+        ORDER BY record_time DESC
+        <if test="page != null">
+            LIMIT #{page},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(message_id) FROM message_info
+        WHERE status = 'START' AND (TYPE != 'pri' OR author = #{author})
+    </select>
+</mapper>

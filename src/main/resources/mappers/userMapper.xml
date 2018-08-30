@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yimi.dao.UserDao">
+
+    <resultMap id="userInfoDto" type="cn.yimi.dto.UserInfo">
+        <result column="empid"  property="empid"/>
+        <result column="password"  property="password"/>
+        <result column="status"  property="stat"/>
+        <result column="emp_name"  property="empName"/>
+        <result column="emp_phone"  property="empPhone"/>
+        <result column="emp_email"  property="empEmail"/>
+        <result column="emp_qq"  property="empQQ"/>
+        <result column="emp_sex"  property="empSex"/>
+        <result column="role" property="role"/>
+    </resultMap>
+
+    <select id="getUserInfo" resultMap="userInfoDto" parameterType="cn.yimi.dto.UserInfo">
+        select t.*,t2.* from user t left join user_info t2 on  t.empid = t2.emp_id where t.empid = #{empid} and t.status = 'START'
+    </select>
+
+    <!-- 获取用户全部信息 -->
+    <select id="getAllUserInfo" resultMap="userInfoDto">
+		select * from user t left join user_info t2 on  t.empid = t2.emp_id and t.status = 'START'
+	</select>
+
+    <!-- 新增用户信息 -->
+    <update id="insertUserInfo">
+		insert into user (empid, password, status, role) values (
+		#{empid},
+		#{password},
+		'START',
+		'1'
+		)
+	</update>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yimi.dao.ArticleDao">
+    <resultMap id="articleVo" type="cn.yimi.vo.ArticleVo">
+        <result column="article_name" property="articleName"/>
+        <result column="article_url" property="articleUrl"/>
+        <result column="article_up" property="articleUp"/>
+        <result column="status" property="status"/>
+        <result column="article_id" property="articleId"/>
+    </resultMap>
+
+    <sql id="insertColumn">
+        article_name,
+        article_url,
+        article_up,
+        status,
+        record_time
+    </sql>
+
+    <insert id="insertArticle" parameterType="cn.yimi.dto.ArticleDto">
+        INSERT INTO article_info (
+        <include refid="insertColumn"></include>
+        ) VALUES (
+        #{articleName},#{articleUrl},#{articleUp},'START',#{recordTime}
+        )
+    </insert>
+
+    <update id="delArticle" parameterType="java.lang.String">
+        UPDATE article_info SET status = 'STOP'
+        WHERE article_id = #{articleId}
+    </update>
+
+    <select id="getArticleList" parameterType="cn.yimi.vo.ArticleVo" resultMap="articleVo">
+        SELECT article_name,article_url,article_id,article_up
+        FROM article_info WHERE status = 'START'
+        <if test="condition != null">
+            AND article_name LIKE CONCAT('%',#{condition},'%')
+        </if>
+        ORDER BY article_up DESC, record_time DESC
+        <if test="page != null">
+            LIMIT #{page},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getCountArticle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(article_id) FROM article_info WHERE status = 'START'
+        <if test="condition != null">
+            AND article_name LIKE CONCAT('%',#{condition},'%')
+        </if>
+    </select>
+
+    <update id="upArticle">
+        UPDATE article_info SET article_up = #{1}
+        WHERE article_id = #{0}
+    </update>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yimi.dao.MenuDao">
+    <resultMap id="menu" type="cn.yimi.dto.MenuDto">
+        <result column="menu_title" property="menuTitle"></result>
+        <result column="menu_url" property="menuUrl"></result>
+        <result column="menu_leave" property="menuLeave"></result>
+        <result column="menu_type" property="menuType"></result>
+        <result column="menu_icon" property="menuIcon"></result>
+    </resultMap>
+
+    <sql id="insertColumn">
+        menu_title,
+        menu_url,
+        menu_leave,
+        menu_type,
+        menu_icon
+    </sql>
+
+    <select id="getAllMenu" resultMap="menu">
+        SELECT
+        <include refid="insertColumn"></include>
+        FROM sys_menu
+        WHERE menu_status = 'START' ORDER BY menu_sort
+    </select>
+</mapper>

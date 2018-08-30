@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yimi.dao.VisitDao">
+    <resultMap id="visitDao" type="cn.yimi.dto.VisitInfo">
+        <result column="visit_time" property="visit_time"></result>
+        <result column="visiter"  property="visiter"></result>
+        <result column="visit_ip" property="visit_ip"></result>
+        <result column="visit_address" property="visit_address"></result>
+    </resultMap>
+
+    <sql id="insertColumn">
+        visit_time,
+        visiter,
+        visit_ip,
+        visit_address
+    </sql>
+
+    <update id="insertVisitRecord" parameterType="cn.yimi.dto.VisitInfo">
+      INSERT INTO  visit_record (
+      <include refid="insertColumn"></include>
+      )
+      VALUES (
+        #{visit_time},
+        #{visiter},
+        #{visit_ip},
+        #{visit_address}
+      )
+    </update>
+
+</mapper>
