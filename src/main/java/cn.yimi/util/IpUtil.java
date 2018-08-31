@@ -11,8 +11,6 @@ public class IpUtil {
     private static Logger logger = Logger.getLogger(IpUtil.class);
 
     public static String getIpAddress(HttpServletRequest request) {
-        logger.info("解析用户ip地址");
-
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");

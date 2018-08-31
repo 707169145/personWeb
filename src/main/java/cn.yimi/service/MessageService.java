@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class MessageService {
      * @return
      */
     public List<MessageDto> getMessageLit(MessageVo messageVo) {
-        logger.info("获取留言列表,用户：" + SessionUtil.getSession("empid"));
+        logger.info("获取留言列表,用户：" + SessionUtil.getSession("empid") + ",是否使用缓存" + messageVo.getCache());
 
         messageVo.setPageSize(10);
         // 计算分页条件
@@ -62,8 +63,10 @@ public class MessageService {
             }
         }
         list = messageDao.getMessageList(messageVo);
-        redisService.setCache(cacheKey, list);
 
+        if ("cache".equals(messageVo.getCache())) {
+            redisService.setCache(cacheKey, list);
+        }
         return list;
     }
 
@@ -84,6 +87,7 @@ public class MessageService {
     public Integer delMessage(String messageId) {
         logger.info("删除留言" + messageId);
 
+        // redis未启动时会导致等待时间过长
         redisService.delCache(List.class.getSimpleName() + MessageVo.class.getSimpleName() + SessionUtil.getSession("empid").toString());
         return messageDao.delMessage(messageId);
     }
@@ -94,11 +98,15 @@ public class MessageService {
      *      留言实体
      * @return
      */
-    public Integer insertMessage(MessageDto messageDto) {
+    public Integer insertMessage(MessageDto messageDto) throws UnsupportedEncodingException {
         logger.info("新增留言" + messageDto);
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         messageDto.setRecordTime(format.format(new Date()));
+
+        // 字符串转码
+        byte[] message = messageDto.getMessage().getBytes("UTF-8");
+        messageDto.setMessage(new String(message,"UTF-8"));
 
         redisService.delCache(List.class.getSimpleName() + MessageVo.class.getSimpleName() + SessionUtil.getSession("empid").toString());
         return messageDao.insertMessage(messageDto);

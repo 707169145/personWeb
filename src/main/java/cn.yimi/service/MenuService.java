@@ -44,7 +44,7 @@ public class MenuService {
 
         for (int i = menuList.size()-1; i >= 0 ; i--) {
             MenuDto menu = menuList.get(i);
-            if (-1 == userType.indexOf(menu.getMenuType())){
+            if (-1 == menu.getMenuType().indexOf(userType)){
                 // 无权限访问此菜单
                 menuList.remove(menu);
             }

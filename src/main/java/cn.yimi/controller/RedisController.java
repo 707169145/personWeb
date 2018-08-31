@@ -25,7 +25,7 @@ public class RedisController {
         return ResultBuilder.success();
     }
 
-    @RequestMapping(value = "/clearCache")
+    @RequestMapping(value = "/system/clearCache")
     @ResponseBody
     public ResultModal clearCache() {
         try{

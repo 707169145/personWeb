@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 文章分享相关操作
+ */
 @RequestMapping(value = "/article")
 @Controller
 public class ArticleController {

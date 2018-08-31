@@ -22,8 +22,8 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse)servletResponse;
 
         // 后续可修改为配置文件或者白名单的形式
-//        response.setHeader("Access-Control-Allow-Origin", "http://112.74.52.249");
-        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8848");
+        response.setHeader("Access-Control-Allow-Origin", "http://112.74.52.249");
+//        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8848");
         response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type,empid,token");
         response.setHeader("Access-Control-Allow-Credentials", "true");

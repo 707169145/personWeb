@@ -30,7 +30,7 @@ public class RedisService {
         try {
             jedis = jedisPool.getResource();
         } catch (Exception e){
-            logger.warn("加载redis失败");
+            logger.warn("加载redis失败" + e.toString());
             return;
         }
 
@@ -48,7 +48,7 @@ public class RedisService {
         try {
             jedis = jedisPool.getResource();
         } catch (Exception e){
-            logger.warn("加载redis失败");
+            logger.warn("加载redis失败" + e.toString());
             return null;
         }
 
@@ -66,7 +66,7 @@ public class RedisService {
         try {
             jedis = jedisPool.getResource();
         } catch (Exception e){
-            logger.warn("加载redis失败");
+            logger.warn("加载redis失败" + e.toString());
             return;
         }
         Set<String> set = jedis.keys(key+"*");
